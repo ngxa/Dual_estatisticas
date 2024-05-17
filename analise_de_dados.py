@@ -4,13 +4,8 @@ Created on Tue May 14 15:13:01 2024
 
 @author: naguiar
 """
-import altair as alt
+
 import streamlit as st
-import datetime
-import locale
-import requests
-import numpy as np
-import re
 import pandas as pd
 import warnings
 import plotly.express as px
@@ -39,7 +34,7 @@ def page_2():
         
         mes = st.selectbox("Selecione o mês", abas_geral, index=None, placeholder = 'Escolha uma opção')
         if mes:
-            df = open_conditions(mes)
+            df = open_conditions(arquivo, mes)
             df['Prêmio Liquido'] = pd.to_numeric(df['Prêmio Liquido'], errors='coerce')
             status_lista = df['Status'].dropna().unique().tolist()
             
@@ -189,8 +184,8 @@ def criar_grafico_pizza(df, analista_col, porcentagem_col):
     fig = px.pie(df, names=analista_col, values=porcentagem_col, title='Porcentagem de Cotação por Analistas')
     return fig
     
-def open_conditions(sheet):
-    excel = pd.ExcelFile('0 -Controle de Cotações _2024.xlsx', engine= 'openpyxl')
+def open_conditions(arquivo, sheet):
+    excel = pd.ExcelFile(arquivo, engine= 'openpyxl')
     df = excel.parse(sheet)
     return df  
 
